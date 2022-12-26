@@ -1,10 +1,11 @@
 import { h, Fragment } from "preact";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import search from "./search";
 
 export default function Setup() {
   const bareServer = useRef<HTMLInputElement | null>(null);
-  const websiteURL = useRef<HTMLInputElement | null>(null);
-  const defaultWebsiteURL = useMemo(
+  const websiteAddress = useRef<HTMLInputElement | null>(null);
+  const defaultWebsiteAddress = useMemo(
     () => localStorage.getItem("website url") || "https://www.google.com/",
     []
   );
@@ -47,14 +48,19 @@ export default function Setup() {
 
           if (bareServer.current === null)
             throw new TypeError("Bare server URL input doesn't exist.");
-          if (websiteURL.current === null)
+          if (websiteAddress.current === null)
             throw new TypeError("Website URL input doesn't exist.");
 
           localStorage.setItem("bare server url", bareServer.current.value);
-          localStorage.setItem("website url", websiteURL.current.value);
+          localStorage.setItem("website url", websiteAddress.current.value);
 
           setBareServerURL(bareServer.current.value);
-          setUrl(websiteURL.current.value);
+          setUrl(
+            search(
+              websiteAddress.current.value,
+              "https://www.google.com/search?q=%s"
+            )
+          );
         }}
       >
         <h3>Proxy Settings</h3>
@@ -78,20 +84,12 @@ export default function Setup() {
         <hr />
         <h3>Website Settings</h3>
         <label>
-          URL:
+          Address:
           <br />
           <input
-            ref={websiteURL}
-            onInput={(event) => {
-              try {
-                new URL(event.currentTarget.value);
-                event.currentTarget.setCustomValidity("");
-              } catch (err) {
-                event.currentTarget.setCustomValidity("Invalid URL");
-              }
-            }}
+            ref={websiteAddress}
             type="text"
-            defaultValue={defaultWebsiteURL}
+            defaultValue={defaultWebsiteAddress}
           />
         </label>
         <hr />
