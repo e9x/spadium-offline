@@ -85,6 +85,7 @@ const config = {
     new HtmlWebpackPlugin({
       template: fileURLToPath(new URL("./index.html", import.meta.url)),
       scriptLoading: "blocking",
+      filename: "spadium.html",
     }),
     // for production builds & distribution
     isProd && new HtmlInlineScriptPlugin(),
