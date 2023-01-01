@@ -41,6 +41,9 @@ export default function Setup() {
   ) : (
     <>
       <h1>Spadium</h1>
+      <p>
+        <a href="https://github.com/e9x/spadium-offline">GitHub</a>
+      </p>
       <hr />
       <form
         onSubmit={(event) => {
