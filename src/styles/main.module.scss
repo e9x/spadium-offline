@@ -1,0 +1,106 @@
+body {
+  margin: 0;
+}
+
+.window {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  box-sizing: content-box;
+}
+
+.nav {
+  position: relative;
+  display: flex;
+  flex-direction: row-reverse;
+  padding: 10px 25px;
+  gap: 7px;
+
+  button.item {
+    border: none;
+    margin: 0;
+    background-color: transparent;
+    text-align: unset;
+  }
+
+  .item {
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    a,
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    svg {
+      fill: #333;
+    }
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.title {
+  margin-top: 70px;
+  font-size: 50px;
+}
+
+.address {
+  width: 325px;
+  padding: 10px;
+}
+
+.proxySettingsContainer {
+  .settings {
+    &.open {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    &:active {
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  .proxySettings {
+    &.open {
+      display: flex;
+    }
+    padding: 10px;
+    flex-direction: column;
+    display: none;
+    position: absolute;
+    right: 10px;
+    top: 100%;
+    border: 1px solid black;
+  }
+}
+
+.error {
+  font-size: 12px;
+  color: red;
+  font-weight: bold;
+}

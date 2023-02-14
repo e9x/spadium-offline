@@ -1,13 +1,14 @@
-declare namespace preact {
-  namespace JSX {
-    interface IntrinsicElements {
-      "spadium-proxy": SpadiumProxyAttributes;
-    }
+declare namespace JSX {
+  interface IntrinsicElements {
+    "spadium-proxy": SpadiumProxyAttributes;
   }
 }
 
 interface SpadiumProxyAttributes
-  extends preact.JSX.HTMLAttributes<HTMLElement> {
+  extends React.DetailedHTMLProps<
+    React.AnchorHTMLAttributes<HTMLElement>,
+    HTMLElement
+  > {
   src?: string;
   server?: string;
 }

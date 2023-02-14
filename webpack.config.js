@@ -57,6 +57,34 @@ const config = {
         use: ["source-map-loader"],
       },
       {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
+      },
+      {
+        test: /\.s[ca]ss$/i,
+        use: [
+          "style-loader",
+          {
+            loader: "css-loader",
+            options: { importLoaders: 1, modules: true },
+          },
+          "sass-loader",
+        ],
+      },
+      {
+        test: /\.svg$/i,
+        loader: "@svgr/webpack",
+        options: {
+          prettier: false,
+          svgo: false,
+          svgoConfig: {
+            plugins: [{ removeViewBox: false }],
+          },
+          titleProp: true,
+          ref: true,
+        },
+      },
+      {
         test: /\.tsx?$/,
         exclude: /node_modules/,
         use: {
@@ -70,8 +98,7 @@ const config = {
               externalHelpers: true,
               transform: {
                 react: {
-                  pragma: "h",
-                  pragmaFrag: "Fragment",
+                  runtime: "automatic",
                 },
               },
             },
