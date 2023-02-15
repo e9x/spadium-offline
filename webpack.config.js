@@ -16,7 +16,9 @@ const isProd = process.env.NODE_ENV === "production";
 
 process.env.NODE_ENV = isProd ? "production" : "development";
 
-process.env.BARE_SERVER = devServerBare;
+process.env.REACT_APP_BARE_SERVER = devServerBare;
+
+process.env.REACT_APP_DEFAULT_BARE_SERVER ||= "";
 
 /**
  * @type {CompleteConfig}
@@ -117,7 +119,11 @@ const config = {
     }),
     // for production builds & distribution
     isProd && new HtmlInlineScriptPlugin(),
-    new webpack.EnvironmentPlugin("NODE_ENV", "BARE_SERVER"),
+    new webpack.EnvironmentPlugin(
+      "NODE_ENV",
+      "REACT_APP_BARE_SERVER",
+      "REACT_APP_DEFAULT_BARE_SERVER"
+    ),
     new ESLintWebpackPlugin(),
   ].filter(Boolean),
 };

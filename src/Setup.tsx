@@ -12,7 +12,9 @@ export default function Setup() {
   const proxySettingsContainer = useRef<HTMLDivElement | null>(null);
   const [bareServerURL, setBareServerURL] = useState<string>(
     localStorage["bare server url"] ||
-      (process.env.NODE_ENV === "production" ? "" : process.env.BARE_SERVER) ||
+      (process.env.NODE_ENV === "production"
+        ? process.env.REACT_APP_DEFAULT_BARE_SERVER
+        : process.env.REACT_APP_BARE_SERVER) ||
       ""
   );
   const [url, setUrl] = useState<string | null>(null);
@@ -123,7 +125,7 @@ export default function Setup() {
               Bare server address:
               <br />
               <input
-                placeholder="https://uv.holyubofficial.net/"
+                placeholder="https://Bare-server-URL/"
                 onChange={(event) => {
                   try {
                     getBareServerURL(event.currentTarget.value);
