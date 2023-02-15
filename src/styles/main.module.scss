@@ -67,6 +67,12 @@ body {
 .title {
   margin-top: 70px;
   font-size: 50px;
+
+  .spade {
+    width: 30px;
+    height: 35px;
+    transform: translateY(5px);
+  }
 }
 
 .address {

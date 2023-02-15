@@ -1,8 +1,9 @@
 import clsx from "clsx";
 import styles from "./styles/main.module.scss";
 import { useEffect, useRef, useState } from "react";
-import GithubCircle from "./assets/github-circle.svg";
-import Wrench from "./assets/wrench.svg";
+import { ReactComponent as GithubCircle } from "./assets/github-circle.svg";
+import { ReactComponent as Wrench } from "./assets/wrench.svg";
+import { ReactComponent as Spade } from "./assets/spade.svg";
 import search from "./search";
 
 export default function Setup() {
@@ -99,7 +100,11 @@ export default function Setup() {
         </div>
       </div>
       <div className={styles.main}>
-        <h1 className={styles.title}>Spadium</h1>
+        <h1 className={styles.title}>
+          Sp
+          <Spade className={styles.spade} />
+          dium
+        </h1>
         <form
           onSubmit={(event) => {
             event.preventDefault();

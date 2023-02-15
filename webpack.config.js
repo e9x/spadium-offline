@@ -80,6 +80,7 @@ const config = {
           svgoConfig: {
             plugins: [{ removeViewBox: false }],
           },
+          exportType: "named",
           titleProp: true,
           ref: true,
         },
