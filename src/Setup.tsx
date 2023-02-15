@@ -1,6 +1,7 @@
+import BareClient from "@tomphttp/bare-client";
 import clsx from "clsx";
 import styles from "./styles/main.module.scss";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ReactComponent as GithubCircle } from "./assets/github-circle.svg";
 import { ReactComponent as Wrench } from "./assets/wrench.svg";
 import { ReactComponent as Spade } from "./assets/spade.svg";
@@ -23,6 +24,56 @@ export default function Setup() {
   const [bareServerError, setBareServerError] = useState<string | null>(null);
   const bareServerInput = useRef<HTMLInputElement | null>(null);
 
+  /**
+   * Omnibox completions
+   */
+  const client = useMemo(
+    () =>
+      bareServerURL
+        ? new BareClient(getBareServerURL(bareServerURL))
+        : undefined,
+    [bareServerURL]
+  );
+
+  const [omniValue, setOmniValue] = useState("");
+  const [dataList, setDataList] = useState<string[] | null>(null);
+  const abort = useRef(new AbortController());
+
+  useEffect(() => {
+    if (!client || !omniValue) return;
+
+    abort.current.abort();
+    abort.current = new AbortController();
+    // clear the list
+    setDataList([]);
+
+    // fetch bing suggestions
+    client
+      .fetch(
+        `https://www.bing.com/AS/Suggestions?${new URLSearchParams({
+          qry: omniValue,
+          cvid: "\u0001",
+        })}`,
+        {
+          signal: abort.current.signal,
+        }
+      )
+      .then(async (res) => {
+        const text = await res.text();
+
+        if (!res.ok) throw new Error(text);
+
+        const rg = /<span class="sa_tm_text">(.*?)<\/span>/g;
+        let matchResult: RegExpMatchArray | null = null;
+        const list: string[] = [];
+
+        while ((matchResult = rg.exec(text)) !== null)
+          list.push(stripHtml(matchResult[1]));
+
+        setDataList(list);
+      });
+  }, [client, omniValue]);
+
   useEffect(() => {
     localStorage["bare server url"] = bareServerURL;
   }, [bareServerURL]);
@@ -37,7 +88,11 @@ export default function Setup() {
   }, [renderProxy]);
 
   return renderProxy ? (
-    <spadium-proxy className={styles.window} src={url} server={bareServerURL} />
+    <spadium-proxy
+      className={styles.window}
+      src={url}
+      server={getBareServerURL(bareServerURL)}
+    />
   ) : (
     <main className={styles.content}>
       <div className={styles.nav}>
@@ -71,12 +126,7 @@ export default function Setup() {
                 placeholder="https://uv.holyubofficial.net/"
                 onChange={(event) => {
                   try {
-                    new URL(
-                      event.currentTarget.value,
-                      process.env.NODE_ENV === "production"
-                        ? undefined
-                        : location.toString()
-                    );
+                    getBareServerURL(event.currentTarget.value);
                     setBareServerError(null);
                     setBareServerURL(event.currentTarget.value);
                   } catch (err) {
@@ -128,12 +178,41 @@ export default function Setup() {
         >
           <input
             ref={websiteAddress}
+            list="address"
             type="text"
             className={styles.address}
             placeholder="Search Google or type a URL"
+            onInput={(event) => {
+              setOmniValue(event.currentTarget.value);
+            }}
           />
+          <datalist id="address">
+            {dataList?.map((option, i) => (
+              <option key={i}>{option}</option>
+            ))}
+          </datalist>
         </form>
       </div>
     </main>
   );
+}
+
+function getBareServerURL(partial: string) {
+  return new URL(
+    partial,
+    process.env.NODE_ENV === "production" ? undefined : location.toString()
+  ).toString();
+}
+
+// import { stripHtml } from "string-strip-html";
+/**
+ * Removes HTML tags from a string
+ * @param html Raw HTML
+ */
+function stripHtml(html: string) {
+  const div = document.createElement("div");
+  // this is safe
+  // the div isn't connected
+  div.innerHTML = html;
+  return div.textContent || "";
 }
