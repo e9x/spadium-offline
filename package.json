@@ -44,6 +44,6 @@
     "clsx": "^1.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "spadium": "https://github.com/e9x/spadium/releases/download/v1.0.0-alpha.1/spadium-1.0.0-alpha.1.tgz"
+    "spadium": "https://github.com/e9x/spadium/releases/download/v1.0.0-alpha.2/spadium-1.0.0-alpha.2.tgz"
   }
 }
