@@ -90,11 +90,9 @@ export default function Setup() {
   }, [renderProxy]);
 
   return renderProxy ? (
-    <spadium-proxy
-      className={styles.window}
-      src={url}
-      server={getBareServerURL(bareServerURL)}
-    />
+    <div className={styles.window}>
+      <spadium-proxy src={url} server={getBareServerURL(bareServerURL)} />{" "}
+    </div>
   ) : (
     <main className={styles.content}>
       <div className={styles.nav}>
